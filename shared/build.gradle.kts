@@ -34,6 +34,8 @@ kotlin {
     }
 
     sourceSets {
+        val voyagerVersion = "1.0.0-rc06"
+
         val commonMain by getting {
             dependencies {
                 //put your multiplatform dependencies here
@@ -49,6 +51,10 @@ kotlin {
                 implementation("dev.icerock.moko:mvvm-compose:0.16.1")
                 implementation("dev.icerock.moko:mvvm-flow:0.16.1")
                 implementation("dev.icerock.moko:mvvm-flow-compose:0.16.1")
+
+                // Used for the basic navigation
+                implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
+
             }
         }
         val commonTest by getting {
