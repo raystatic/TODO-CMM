@@ -1,0 +1,22 @@
+CREATE TABLE TODO (
+    id INTEGER NOT NULL,
+    todo TEXT NOT NULL,
+    isCompleted INTEGER AS Boolean DEFAULT FALSE,
+    updateAt INTEGER NOT NULL
+);
+
+insertTodo:
+INSERT INTO TODO(id, todo, isCompleted, updateAt)
+VALUES(?,?,?, ?);
+
+removeTODO:
+DELETE FROM TODO WHERE id = ?;
+
+updateTODO:
+UPDATE TODO SET todo = ?, isCompleted = ?, updateAt = ? WHERE id = ?;
+
+removeAllTODOs:
+DELETE FROM TODO;
+
+getAll:
+SELECT * FROM TODO;

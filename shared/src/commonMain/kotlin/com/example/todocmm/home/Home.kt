@@ -70,7 +70,7 @@ fun Home(
 
         Spacer(modifier.height(20.dp))
 
-        val list = viewModel.todoList.collectAsState().value
+        val list = viewModel.todoList.collectAsState().value ?: listOf()
 
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -78,7 +78,7 @@ fun Home(
             itemsIndexed(list) { index, item ->
                 TodoView(modifier, item) {
                     val updatedTodo = list[index].copy(isCompleted = it)
-                    viewModel.updateTodo(updatedTodo, index)
+                    viewModel.updateTodo(updatedTodo)
                 }
             }
         }

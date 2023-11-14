@@ -2,6 +2,8 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("org.jetbrains.compose")
+    kotlin("plugin.serialization")
+    id("com.squareup.sqldelight")
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
@@ -35,6 +37,8 @@ kotlin {
 
     sourceSets {
         val voyagerVersion = "1.0.0-rc06"
+        val coroutinesVersion = extra["coroutines.version"] as String
+        val sqlDelightVersion = extra["sqldelight.version"] as String
 
         val commonMain by getting {
             dependencies {
@@ -55,6 +59,9 @@ kotlin {
                 // Used for the basic navigation
                 implementation("cafe.adriel.voyager:voyager-navigator:$voyagerVersion")
 
+                implementation("com.squareup.sqldelight:runtime:$sqlDelightVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+
             }
         }
         val commonTest by getting {
@@ -67,6 +74,7 @@ kotlin {
             dependencies {
                 implementation("androidx.appcompat:appcompat:1.6.1")
                 implementation("androidx.activity:activity-compose:1.7.2")
+                implementation("com.squareup.sqldelight:android-driver:$sqlDelightVersion")
             }
         }
 
@@ -79,6 +87,10 @@ kotlin {
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
             iosSimulatorArm64Main.dependsOn(this)
+
+            dependencies {
+                implementation("com.squareup.sqldelight:native-driver:$sqlDelightVersion")
+            }
         }
         val iosX64Test by getting
         val iosArm64Test by getting
@@ -102,6 +114,12 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
+sqldelight {
+    database("AppDatabase") {
+        packageName = "com.example.todocmm.cache"
     }
 }
 
