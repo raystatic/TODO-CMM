@@ -70,15 +70,50 @@ fun Home(
 
         Spacer(modifier.height(20.dp))
 
-        val list = viewModel.todoList.collectAsState().value ?: listOf()
+        val incompleteTodos = viewModel.incompleteTodoList.collectAsState().value ?: listOf()
+        val completedTodos = viewModel.completedTodoList.collectAsState().value ?: listOf()
 
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            itemsIndexed(list) { index, item ->
-                TodoView(modifier, item) {
-                    val updatedTodo = list[index].copy(isCompleted = it)
-                    viewModel.updateTodo(updatedTodo)
+
+            if (incompleteTodos.isNotEmpty()) {
+                item {
+                    Text(
+                        text = "Pending Tasks",
+                        style = TextStyle(
+                            color = Color.Black,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 16.sp
+                        )
+                    )
+                }
+
+                itemsIndexed(incompleteTodos) { index, item ->
+                    TodoView(modifier, item) {
+                        val updatedTodo = incompleteTodos[index].copy(isCompleted = it)
+                        viewModel.updateTodo(updatedTodo)
+                    }
+                }
+            }
+
+            if (completedTodos.isNotEmpty()) {
+                item {
+                    Text(
+                        text = "Completed",
+                        style = TextStyle(
+                            color = Color.Black,
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 16.sp
+                        )
+                    )
+                }
+
+                itemsIndexed(completedTodos) { index, item ->
+                    TodoView(modifier, item) {
+                        val updatedTodo = completedTodos[index].copy(isCompleted = it)
+                        viewModel.updateTodo(updatedTodo)
+                    }
                 }
             }
         }
@@ -94,9 +129,9 @@ fun TodoView(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
-                onTaskToggled(todo.isCompleted.not())
-            }
+//            .clickable {
+//                onTaskToggled(todo.isCompleted.not())
+//            }
             .border(width = 1.dp, color = Color.LightGray, shape = RoundedCornerShape(16.dp)),
         verticalAlignment = Alignment.CenterVertically,
     ) {

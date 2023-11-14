@@ -14,41 +14,41 @@ class HomeViewModel: ViewModel() {
 
     private val repository = Repository()
 
-    private val defaultTodoList = listOf(
-        Todo(
-            id = 0,
-            todo = "Task 1"
-        ),
-        Todo(
-            id = 1,
-            todo = "Task 2"
-        ),
-        Todo(
-            id = 2,
-            todo = "Task 3"
-        )
-    )
+    private val defaultTodoList = mutableListOf<Todo>()
 
     init {
         insertDefaultTodos()
     }
 
-    var todoList = MutableStateFlow(repository.getTodos())
+    var incompleteTodoList = MutableStateFlow(repository.getInCompletedTodos())
+        private set
+
+    var completedTodoList = MutableStateFlow(repository.getCompletedTodos())
         private set
 
     private fun insertDefaultTodos() = viewModelScope.launch {
         val oldData = repository.getTodos()
+        for (i in 0 until 5) {
+            defaultTodoList.add(
+                Todo(
+                    id = i.toLong(),
+                    todo = "Task ${i + 1}"
+                )
+            )
+        }
         defaultTodoList.forEach { todo ->
             if (oldData?.find { it.id == todo.id } == null) {
                 repository.createTodo(todo)
             }
         }
-        todoList.value = repository.getTodos()
+        incompleteTodoList.value = repository.getInCompletedTodos()
+        completedTodoList.value = repository.getCompletedTodos()
     }
 
     fun updateTodo(todo: Todo) = viewModelScope.launch{
         repository.updateTodo(todo)
-        todoList.value = repository.getTodos()
+        incompleteTodoList.value = repository.getInCompletedTodos()
+        completedTodoList.value = repository.getCompletedTodos()
     }
 
 }

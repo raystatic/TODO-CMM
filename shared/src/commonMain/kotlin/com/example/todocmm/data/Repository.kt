@@ -32,6 +32,10 @@ class Repository {
 
     fun getTodos() = database.getAllTodos()?.map { it.toTodo() }
 
+    fun getCompletedTodos() = database.getAllTodos()?.filter { it.isCompleted == true }?.map { it.toTodo() }
+
+    fun getInCompletedTodos() = database.getAllTodos()?.filter { it.isCompleted == false }?.map { it.toTodo() }
+
 }
 
 fun Todo.toTODO(): TODO {

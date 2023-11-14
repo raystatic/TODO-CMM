@@ -51,7 +51,7 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory?) {
     }
 
     internal fun getAllTodos(): List<TODO>? {
-        return query?.getAll()?.executeAsList()
+        return query?.getAll()?.executeAsList()?.sortedByDescending { it.updateAt }
     }
 
 }
