@@ -1,5 +1,6 @@
 package com.example.todocmm.home
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -126,13 +127,23 @@ fun TodoView(
     todo: Todo,
     onTaskToggled: (Boolean) -> Unit
 ) {
+    val bgColor = if (todo.isCompleted) {
+        0xFFF9F6FF
+    } else {
+        0xFFFFF2E2
+    }
+
+    val borderColor = if (todo.isCompleted) {
+        0XFFB887FE
+    } else {
+        0XFFFEC274
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
-//            .clickable {
-//                onTaskToggled(todo.isCompleted.not())
-//            }
-            .border(width = 1.dp, color = Color.LightGray, shape = RoundedCornerShape(16.dp)),
+            .background(color = Color(bgColor))
+            .border(width = 1.dp, color = Color(borderColor), shape = RoundedCornerShape(8.dp)),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(checked = todo.isCompleted, onCheckedChange = {
